@@ -1,0 +1,137 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+/* 초기화 */
+* {margin:0;padding:0;box-sizing:border-box;}
+html, body{color:#3d3d3d;font-family:'Noto Sans KR', sans-serif;font-weight:normal;overflow-x:hidden;background:#fff;}
+a {color:#3d3d3d;text-decoration:none;}
+ul,li,ol,dl {list-style:none}
+
+/* 공통 */
+/* .p_r{position:relative;} */
+.wrap{max-width:750px;margin:0 auto;height:100%;background:#fff;overflow:hidden;}
+
+/*Intro*/
+.loading{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;}
+.loading .character_area{position:relative;}
+.loading .mice{width:200px;animation:walk 3s ease-in-out both;}
+.loading .dungdung{width:140px;position:absolute;top:-100px;right:-52px;animation:fadeIn .5s 3s ease-in-out both;opacity:0}
+@keyframes walk {
+    5%{margin-left:5%;transform:rotate(0deg)}
+    10%{margin-left:0%;transform:rotate(-10deg)}
+    15%{margin-left:0%;transform:rotate(0deg)}
+    35%{transform:rotate(0deg)}
+    40%{margin-left:-5%;transform:rotate(-10deg)}
+    55%{margin-left:-5%;transform:rotate(0deg)}
+    80%{transform:rotate(0deg)}
+    85%{margin-left:-10%;transform:rotate(-10deg)}
+    100%{margin-left:-10%;transform:rotate(0deg)}
+}
+@keyframes fadeIn {
+    100%{opacity:1}
+}
+
+/*Start*/
+.start_area{width:100%;height:100vh;position:relative}
+.start_area h1{position:absolute;top:150px;left:50%;margin-left:-100px}
+.start_area h1 img{width:250px;animation:to-top .5s ease-in-out both;opacity:0;}
+.start_area .number_wrap li{position:absolute;top:100px;left:50%;margin-left:-161px;opacity:0}
+.start_area .number_wrap li img{width:33px;}
+.start_area .number_wrap li:nth-of-type(1){transform:rotate(-17deg);animation:fadeIn .2s .5s ease-in-out both;}
+.start_area .number_wrap li:nth-of-type(2){top:73px;margin-left:-129px;animation:fadeIn .2s .7s ease-in-out both;}
+.start_area .number_wrap li:nth-of-type(2) img{width:62px;}
+.start_area .number_wrap li:nth-of-type(3){top:67px;margin-left:-57px;animation:fadeIn .2s .9s ease-in-out both;}
+.start_area .number_wrap li:nth-of-type(3) img{width:38px;}
+.start_area .number_wrap li:nth-of-type(4){top:70px;margin-left:0;transform:rotate(15deg);animation:fadeIn .2s 1.2s ease-in-out both;}
+.start_area .number_wrap li:nth-of-type(4) img{width:47px;}
+.start_area .subway_wrap{width:100%;position:relative;}
+.start_area .subway{position:absolute;top:255px;left:50%;margin-left:-50%;display:flex;flex-wrap:nowrap;width:400%;animation:subway_roll 5s 0ms infinite linear;}
+.start_area .subway li img{width:400px;}
+.start_area .subway li:nth-of-type(odd) img{transform:scaleX(-1);}
+.start_area .btn_wrap{position:absolute;top:450px;left:50%;transform:translateX(-50%);}
+.start_area .btn_wrap li{width:150px;margin-bottom:10px;position:relative;opacity:0;animation:to-top .5s 1.5s ease-in-out both;}
+.start_area .btn_wrap li button{border:none;background:transparent;}
+.start_area .btn_wrap li .btn{width:100%;}
+.start_area .btn_wrap li:hover .btn{animation:bounce-to .8s ease-in-out both;}
+.start_area .btn_wrap li .mice{width:70px;position:absolute;top:-10px;right:-80px;display:none}
+.start_area .btn_wrap li:hover .mice{display:block}
+/*popup*/
+.popup{display:none}
+.popup .bg{width:100%;height:100%;background:#000;opacity:0.5;position:fixed;top:0;left:0}
+.popup .cont{width:90%;background:#fff;padding:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:10px;}
+.popup .cont p{font-size:14px;}
+.popup .cont .close {position:absolute;top:5px;right:10px;}
+.popup .cont .close:after{content:"\00d7"; font-size:20px;}
+.popup .cont span{color:red;font-weight:bold;}
+
+@keyframes to-top{
+    100%{
+        transform:translateY(-8%);
+        -webkit-transform:translateY(-8%);
+        opacity:1;
+    }
+}
+
+@keyframes bounce-to{
+    0% {
+        -webkit-transform:translateY(-20px);
+        transform:translateY(-20px);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+        opacity:1;
+    }
+    24% {
+        opacity:1;
+    }
+    40% {
+        -webkit-transform:translateY(-15px);
+        transform:translateY(-15px);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+    }
+    65% {
+        -webkit-transform:translateY(-8px);
+        transform:translateY(-8px);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+    }
+    82% {
+        -webkit-transform:translateY(-4px);
+        transform:translateY(-4px);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+    }
+    93% {
+        -webkit-transform:translateY(-2px);
+        transform:translateY(-2px);
+        -webkit-animation-timing-function:ease-in;
+        animation-timing-function:ease-in;
+    }
+    25%,
+    55%,
+    75%,
+    87% {
+        -webkit-transform:translateY(0px);
+        transform:translateY(0px);
+        -webkit-animation-timing-function:ease-out;
+        animation-timing-function:ease-out;
+    }
+    100% {
+        -webkit-transform:translateY(0px);
+        transform:translateY(0px);
+        -webkit-animation-timing-function:ease-out;
+        animation-timing-function:ease-out;
+        opacity:1;
+    }
+
+}
+
+@keyframes subway_roll{
+    0% {
+        transform:translate(0, 0);
+    }
+    100% {
+        transform:translate(-800px, 0);
+    }
+}
+/* game */
