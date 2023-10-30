@@ -9,46 +9,32 @@ ul,li,ol,dl {list-style:none}
 
 /* 공통 */
 /* .p_r{position:relative;} */
-.wrap{max-width:750px;margin:0 auto;height:100%;background:#fff;overflow:hidden;}
+.wrap{max-width:750px;margin:0 auto;height:100%;background:pink;overflow:hidden;}
 
 /*Intro*/
 .loading{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;}
 .loading .character_area{position:relative;}
 .loading .mice{width:200px;animation:walk 3s ease-in-out both;}
 .loading .dungdung{width:140px;position:absolute;top:-100px;right:-52px;animation:fadeIn .5s 3s ease-in-out both;opacity:0}
-@keyframes walk {
-    5%{margin-left:5%;transform:rotate(0deg)}
-    10%{margin-left:0%;transform:rotate(-10deg)}
-    15%{margin-left:0%;transform:rotate(0deg)}
-    35%{transform:rotate(0deg)}
-    40%{margin-left:-5%;transform:rotate(-10deg)}
-    55%{margin-left:-5%;transform:rotate(0deg)}
-    80%{transform:rotate(0deg)}
-    85%{margin-left:-10%;transform:rotate(-10deg)}
-    100%{margin-left:-10%;transform:rotate(0deg)}
-}
-@keyframes fadeIn {
-    100%{opacity:1}
-}
 
 /*Start*/
-.start_area{width:100%;height:100vh;position:relative}
-.start_area h1{position:absolute;top:150px;left:50%;margin-left:-100px}
+.start_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;}
+.start_area h1{width:100%;text-align:center;margin-top:135px;margin-left:20px;}
 .start_area h1 img{width:250px;animation:to-top .5s ease-in-out both;opacity:0;}
 .start_area .number_wrap li{position:absolute;top:100px;left:50%;margin-left:-161px;opacity:0}
 .start_area .number_wrap li img{width:33px;}
 .start_area .number_wrap li:nth-of-type(1){transform:rotate(-17deg);animation:fadeIn .2s .5s ease-in-out both;}
 .start_area .number_wrap li:nth-of-type(2){top:73px;margin-left:-129px;animation:fadeIn .2s .7s ease-in-out both;}
 .start_area .number_wrap li:nth-of-type(2) img{width:62px;}
-.start_area .number_wrap li:nth-of-type(3){top:67px;margin-left:-57px;animation:fadeIn .2s .9s ease-in-out both;}
+.start_area .number_wrap li:nth-of-type(3){top:58px;margin-left:-57px;animation:fadeIn .2s .9s ease-in-out both;}
 .start_area .number_wrap li:nth-of-type(3) img{width:38px;}
 .start_area .number_wrap li:nth-of-type(4){top:70px;margin-left:0;transform:rotate(15deg);animation:fadeIn .2s 1.2s ease-in-out both;}
 .start_area .number_wrap li:nth-of-type(4) img{width:47px;}
 .start_area .subway_wrap{width:100%;position:relative;}
-.start_area .subway{position:absolute;top:255px;left:50%;margin-left:-50%;display:flex;flex-wrap:nowrap;width:400%;animation:subway_roll 5s 0ms infinite linear;}
+.start_area .subway{display:flex;flex-wrap:nowrap;width:400%;margin-top:35px;animation:subway_roll 5s 0ms infinite linear;}
 .start_area .subway li img{width:400px;}
 .start_area .subway li:nth-of-type(odd) img{transform:scaleX(-1);}
-.start_area .btn_wrap{position:absolute;top:450px;left:50%;transform:translateX(-50%);}
+.start_area .btn_wrap{display:flex;flex-direction:column;align-items:center;margin-top:70px}
 .start_area .btn_wrap li{width:150px;margin-bottom:10px;position:relative;opacity:0;animation:to-top .5s 1.5s ease-in-out both;}
 .start_area .btn_wrap li button{border:none;background:transparent;}
 .start_area .btn_wrap li .btn{width:100%;}
@@ -64,6 +50,42 @@ ul,li,ol,dl {list-style:none}
 .popup .cont .close:after{content:"\00d7"; font-size:20px;}
 .popup .cont span{color:red;font-weight:bold;}
 
+/* game */
+.quiz_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;}
+.quiz_area >div:first-of-type{width:240px;height:300px;margin:0 auto 30px auto;background:url('../img/q_line1.png') center top/100% no-repeat;position:relative;}
+.quiz_area >div:first-of-type.line2{background-image:url("../img/q_line2.png");}
+.quiz_area >div:first-of-type.line3{background-image:url("../img/q_line3.png");}
+.quiz_area >div:first-of-type.line4{background-image:url("../img/q_line4.png");}
+.quiz_area >div:first-of-type.line4{background-image:url("../img/q_line4.png");}
+.quiz_area .quiz p{position:absolute;top:70px;left:50%;transform:translateX(-50%);width:75%;text-align:center;font-size:28px;font-weight:bold;}
+.quiz_area .answer_area{width:270px;height:300px;margin:0 auto;background:url('../img/answer.png') center top/100% no-repeat;position:relative}
+.quiz_area .answer_area form{position:absolute;top:50px;left:50px}
+.quiz_area .answer_area form label input{border:0;outline:0;padding:5px;width:125px;height:66px;line-height:66px;box-sizing:border-box;text-align:center;font-size:35px;font-weight:bold}
+.quiz_area .answer_area form button{display:none}
+/*result*/
+/* .result{padding:20px}
+.result .level_img{width:80%;margin:0 auto;display:block}
+.result .score{font-size:30px;text-align:center}
+.result .score strong{padding:3% 0;display:block}
+.result .score > span{display:block;padding:5% 2%;border-radius:10px;background:#eef5ff;font-size:18px;}
+.result .retry_btn{display:block;width:70%;max-width:200px;margin:20px auto;}
+.result .retry_btn:hover img{animation:bounce-to .8s ease-in-out both;} */
+
+/* animation */
+@keyframes walk {
+    5%{margin-left:5%;transform:rotate(0deg)}
+    10%{margin-left:0%;transform:rotate(-10deg)}
+    15%{margin-left:0%;transform:rotate(0deg)}
+    35%{transform:rotate(0deg)}
+    40%{margin-left:-5%;transform:rotate(-10deg)}
+    55%{margin-left:-5%;transform:rotate(0deg)}
+    80%{transform:rotate(0deg)}
+    85%{margin-left:-10%;transform:rotate(-10deg)}
+    100%{margin-left:-10%;transform:rotate(0deg)}
+}
+@keyframes fadeIn {
+    100%{opacity:1}
+}
 @keyframes to-top{
     100%{
         transform:translateY(-8%);
@@ -134,4 +156,3 @@ ul,li,ol,dl {list-style:none}
         transform:translate(-800px, 0);
     }
 }
-/* game */
