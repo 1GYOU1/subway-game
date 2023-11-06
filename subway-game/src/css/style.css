@@ -8,7 +8,6 @@ a {color:#3d3d3d;text-decoration:none;}
 ul,li,ol,dl {list-style:none}
 
 /* 공통 */
-/* .p_r{position:relative;} */
 .wrap{max-width:750px;margin:0 auto;height:100%;background:pink;overflow:hidden;}
 
 /*Intro*/
@@ -52,16 +51,19 @@ ul,li,ol,dl {list-style:none}
 
 /* game */
 .quiz_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;}
-.quiz_area >div:first-of-type{width:240px;height:300px;margin:0 auto 30px auto;background:url('../img/q_line1.png') center top/100% no-repeat;position:relative;}
-.quiz_area >div:first-of-type.line2{background-image:url("../img/q_line2.png");}
-.quiz_area >div:first-of-type.line3{background-image:url("../img/q_line3.png");}
-.quiz_area >div:first-of-type.line4{background-image:url("../img/q_line4.png");}
-.quiz_area >div:first-of-type.line4{background-image:url("../img/q_line4.png");}
+.quiz_area > div:first-of-type{width:240px;height:300px;margin:0 auto 30px auto;background:url('../img/q_line1.png') center top/100% no-repeat;position:relative;}
+.quiz_area > div:first-of-type.line2{background-image:url("../img/q_line2.png");}
+.quiz_area > div:first-of-type.line3{background-image:url("../img/q_line3.png");}
+.quiz_area > div:first-of-type.line4{background-image:url("../img/q_line4.png");}
+.quiz_area > div:first-of-type.line4{background-image:url("../img/q_line4.png");}
 .quiz_area .quiz p{position:absolute;top:70px;left:50%;transform:translateX(-50%);width:75%;text-align:center;font-size:28px;font-weight:bold;}
 .quiz_area .answer_area{width:270px;height:300px;margin:0 auto;background:url('../img/answer.png') center top/100% no-repeat;position:relative}
 .quiz_area .answer_area form{position:absolute;top:50px;left:50px}
 .quiz_area .answer_area form label input{border:0;outline:0;padding:5px;width:125px;height:66px;line-height:66px;box-sizing:border-box;text-align:center;font-size:35px;font-weight:bold}
-.quiz_area .answer_area form button{display:none}
+.quiz_area .answer_area button{position:absolute;top:200px;right:0;width:140px;background:transparent;border:none;cursor:pointer;}
+.quiz_area .answer_area button img{width:100%;}
+.quiz_area .answer_area button .click{display:none;}
+.quiz_area .answer_area button .click.on{-webkit-animation:blink-2 1s linear infinite both;animation:blink-2 1s linear infinite both;width:90px;position:absolute;top:-35px;left:-26px;display:block;}
 /*result*/
 /* .result{padding:20px}
 .result .level_img{width:80%;margin:0 auto;display:block}
@@ -93,7 +95,6 @@ ul,li,ol,dl {list-style:none}
         opacity:1;
     }
 }
-
 @keyframes bounce-to{
     0% {
         -webkit-transform:translateY(-20px);
@@ -147,12 +148,33 @@ ul,li,ol,dl {list-style:none}
     }
 
 }
-
 @keyframes subway_roll{
     0% {
         transform:translate(0, 0);
     }
     100% {
         transform:translate(-800px, 0);
+    }
+}
+@-webkit-keyframes blink-2 {
+    0% {
+      opacity:1;
+    }
+    50% {
+      opacity:0.2;
+    }
+    100% {
+      opacity:1;
+    }
+}
+  @keyframes blink-2 {
+    0% {
+      opacity:1;
+    }
+    50% {
+      opacity:0.2;
+    }
+    100% {
+      opacity:1;
     }
 }
