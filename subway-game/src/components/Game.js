@@ -26,7 +26,7 @@ const Game = () => {
             ㄴ 필요한 형태로 가져오기{{ LINE_NUM, STATION_NM }, [1, 평택], [1, 금정]}
             ㄴ 서울역 예외처리-=98
         3. input 입력 텍스트 받아오기
-            ㄴ입력한 값 useState에 넣고(inputValue) 특수문자, 영어 입력 제한
+            ㄴ입력한 값 useState에 넣고(inputValue) 특수문자, 영어, 숫자 입력 제한
         4. input에 답안 입력 후 엔터키, 클릭 시 제출
 
 
@@ -101,13 +101,18 @@ const Game = () => {
     };
 
     const handleInputChange = (event) => {
-        // 영어, 특수문자, 스페이스바(공백) 입력 방지
+        // 영어, 숫자, 특수문자, 스페이스바(공백) 입력 방지
         const englishRegExp = /[A-Za-z]/;
+        const numberRegExp = /\d/;
         const specialCharRegExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&'"\(\)=]/;
         const spaceRegExp = /\s/;
     
         if (englishRegExp.test(event.target.value)) {
             alert('영어는 입력할 수 없습니다.');
+            return;
+        }
+        if (numberRegExp.test(event.target.value)) {
+            alert('숫자는 입력할 수 없습니다.');
             return;
         }
         if (specialCharRegExp.test(event.target.value)) {
@@ -122,6 +127,7 @@ const Game = () => {
         // 입력값에서 영어, 특수문자, 스페이스바(공백)를 제외한 값을 추출
         const lastSubmitValue = event.target.value
             .replace(englishRegExp, '')
+            .replace(numberRegExp, '')
             .replace(specialCharRegExp, '')
             .replace(spaceRegExp, '')
             .trim();
@@ -162,7 +168,7 @@ const Game = () => {
         <div className="wrap">
             <div className="quiz_area">
                 <div className={`quiz line${randomLine}`}>
-                    <p><span>{randomLine}호선</span> 역은?</p>
+                    <p><span>{randomLine}호선</span><br/> 역 이름은?</p>
                 </div>
                 <div className="answer_area">
                     <form id="quiz_submit" onSubmit={handleSubmit}>
