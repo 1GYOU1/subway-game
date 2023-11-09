@@ -147,6 +147,14 @@ const Game = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             console.log('내가 입력한 답안:', inputValue);
+            // console.log(stationData.indexOf([randomLine, inputValue]))
+            const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);
+            if (foundIndex !== -1) {
+                console.log('일치하는 항목의 인덱스:', foundIndex);
+                console.log('일치하는 항목의 랜덤호선:', randomLine);
+            } else {
+                console.log('일치하는 항목을 찾지 못했습니다.');
+            }
             clickRef.current.classList.remove('on');
             setInputValue(''); // input 초기화
         }
