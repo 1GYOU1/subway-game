@@ -65,13 +65,15 @@ const Game = () => {
                     };
                 });
                 // LINE_NUM과 STATION_NM만 추출하여 배열에 저장
-                const extractedData = stationList.map(({ LINE_NUM, STATION_NM }) => {
-                    LINE_NUM = parseInt(LINE_NUM.replace("호선", "").trim());
-                    if (STATION_NM === "서울역") {
-                      STATION_NM = "서울";
-                    }
-                    return [LINE_NUM, STATION_NM];
-                  });
+                const extractedData = stationList
+                    .filter(({ LINE_NUM }) => !isNaN(parseInt(LINE_NUM))) // 숫자가 아닌 경우 필터링
+                    .map(({ LINE_NUM, STATION_NM }) => {
+                        LINE_NUM = parseInt(LINE_NUM.replace("호선", "").trim());
+                        if (STATION_NM === "서울역") {
+                        STATION_NM = "서울";
+                        }
+                        return [LINE_NUM, STATION_NM];
+                    });
                 setStationData(extractedData);
             } catch (error) {
                 setError(error);
@@ -85,7 +87,8 @@ const Game = () => {
 
     useEffect(() => {
         console.log(stationData)
-    }, [stationData])
+        console.log('myAnswr',myAnswr);
+    }, [stationData, myAnswr])
 
     if (loading) {
         return <div className='loading'>Loading...</div>;
@@ -142,24 +145,45 @@ const Game = () => {
         setInputValue(lastSubmitValue);
     };
     
-    // 엔터키 정답 제출
     const handleKeyUp = (event) => {
         if (event.key === 'Enter') {
-            event.preventDefault();
+            event.preventDefault();// 기본 동작(페이지 새로고침) 방지
+
             console.log('내가 입력한 답안:', inputValue);
-            // console.log(stationData.indexOf([randomLine, inputValue]))
-            const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);
+    
+            // 역 이름이 일치하는 인덱스 찾기
+            const foundIndex = stationData.findIndex(item => item[1] === inputValue);
+            
+            // 정답을 찾았을 때
             if (foundIndex !== -1) {
-                console.log('일치하는 항목의 인덱스:', foundIndex);
+                // 역 이름이 일치하는 항목을 찾아서 제외하고 새로운 배열로 설정
+                setStationData(prevStationData => {
+                    // 역 이름이 일치하지 않는 항목만 추려서 새로운 배열로 만듦
+                    const filteredData = prevStationData.filter(item => item[1] !== inputValue);
+                    
+                     // 중복 항목 제외하고 setMyAnswr에 추가
+                    const excludedItems = prevStationData.filter(item => item[1] === inputValue);
+                    setMyAnswr(prevAnswr => [...prevAnswr, ...excludedItems]);
+                    
+                    alert('야호 정답 ~ !')
+                    console.log('정답 !');
+                    
+                    setRandomLine(Math.floor(Math.random() * 4+1));//랜덤 호선 새로 돌리기 
+
+                    return filteredData;// 새로운 배열로 업데이트
+                });
                 console.log('일치하는 항목의 랜덤호선:', randomLine);
             } else {
+                alert('틀렸지롱 ~ !')
                 console.log('일치하는 항목을 찾지 못했습니다.');
             }
+            
             clickRef.current.classList.remove('on');
             setInputValue(''); // input 초기화
         }
     };
-
+    
+    
     //버튼 클릭 정답 제출
     const buttonClick = () => {
         console.log('내가 입력한 답안:', inputValue);
