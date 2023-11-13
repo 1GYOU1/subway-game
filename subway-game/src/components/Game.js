@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import submitBtnImg from '../img/btn_submit.png';
 import clickImg from '../img/click.png';
 import correctImg from '../img/scoring1.png';
+import wrongImg from '../img/scoring2.png';
+import duplicateImg from '../img/scoring3.png';
 import levelImg1 from '../img/level1.png';
 import retryBtnImg from '../img/retry_btn.png';
 
@@ -16,6 +18,7 @@ const Game = () => {
     const [randomLine, setRandomLine] = useState(Math.floor(Math.random() * 4+1))// 랜덤 호선 1~4
     const [inputValue, setInputValue] = useState(''); // input 데이터 입력
     const [myAnswr, setMyAnswr] = useState([]);// 맞은 문제 배열
+    const [quizResult, setQuizResult] = useState(null);// 정답, 오답, 중복 이미지 노출
     const [quizCount, setQuizCount] = useState(0);// 푼 퀴즈 개수
     const [myScore, setMyScore] = useState(0);// 점수
     const [timer, setTimer] = useState(10);// 타이머
@@ -28,19 +31,18 @@ const Game = () => {
         3. input 입력 텍스트 받아오기
             ㄴ입력한 값 useState에 넣고(inputValue) 특수문자, 영어, 숫자 입력 제한
         4. input에 답안 입력 후 엔터키, 클릭 시 제출
+        5. 제출한 입력값이 api 요소의 호선(0번째 배열 요소값), 역 이름(1번째 배열 요소값)이 비교
+            ㄴ 맞으면 원본배열에서 삭제, 내 맞춘 답안 정답 배열 setCorrect에 넣기
+            ㄴ 같은 역이름을 가진 다른 호선 배열 값도 삭제(중복 체크), 내 맞춘 답안 정답 배열 setCorrect에 넣기
+            ㄴ 이미 정답 배열에 있는 값이라면 중복 이미지 노출 
+        6. 정답, 오답, 중복 이미지 노출
 
-
-        5. 제출한 입력값이 api 요소의 호선(0번째 배열 요소값), 역 이름(1번째 배열 요소값)이 비교해서 맞으면 배열에 저장
-        6. input에 입력하여 정답이 맞을 경우 setCorrect에 저장해두기 
-        7. 맞은 답안이 api에 또 있으면 중복 체크 해주기.
-        8. 정답, 오답 구분
-        9. 정답, 오답 이미지 노출
-        10. 10문제 진행 quizCount++
-        11. 타이머기능 10초
-        11. useParams 로 결과 값 넘겨주는 방식 해보기 안되면 props로 전달
+        7. 10문제 진행 quizCount++
+        8. 타이머기능 10초
+        9. 결과 값 props로 전달
 
         --------------------
-        12. 힌트 기능
+        10. 힌트 기능
             ㄴ 지하철 노선도 이미지 노출 ?
     */
 
@@ -88,7 +90,8 @@ const Game = () => {
     useEffect(() => {
         console.log(stationData)
         console.log('myAnswr',myAnswr);
-    }, [stationData, myAnswr])
+        console.log('quizResult', quizResult)
+    }, [stationData, myAnswr, quizResult])
 
     if (loading) {
         return <div className='loading'>Loading...</div>;
@@ -144,52 +147,103 @@ const Game = () => {
         // input 값이 변경될 때마다 inputValue 상태를 업데이트
         setInputValue(lastSubmitValue);
     };
+
+    //정답 제출
+    const answerCheck = () => {
+        if (inputValue.trim() === '') {
+            // 입력값이 비어있을 때 동작하지 않도록 처리
+            return;
+        }
+
+        console.log('내가 입력한 답안:', inputValue);
+
+        // 이미 setMyAnswr에 같은 값이 있는지 확인 (중복 선별)
+        if (myAnswr.some(item => item[0] === randomLine && item[1] === inputValue)) {
+            alert('이미 입력한 답안입니다. 다른 답안을 입력해주세요.');
+            // 중복 이미지 노출
+            setQuizResult('duplicate');
+            quizResultEvent(); // 정답 이미지 노출
+            setTimeout(() => { // 이미지 노출 초기화
+                setQuizResult(null);
+            }, 1500);
+            setInputValue(''); // input 초기화
+            return;
+        }
     
+        // 호선, 역 이름이 모두 일치하는 배열의 index 찾기
+        const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);
+
+        if (foundIndex !== -1) {
+            setStationData(prevStationData => {
+                const filteredData = prevStationData.filter(item => item[1] !== inputValue);// 원본 배열에서 역 이름이 일치하는 항목 모두 제거
+                const excludedItems = prevStationData.filter(item => item[1] === inputValue);// 원본 배열에서 역 이름이 일치하는 항목 중복 답안 제출 방지를 위해 모두 setMyAnswr에 추가
+                setMyAnswr(prevAnswr => [...prevAnswr, ...excludedItems]);
+                
+                alert('야호 정답 ~ !')
+                setQuizResult('correct');
+                quizResultEvent(); // 정답 이미지 노출
+                setTimeout(() => {
+                    setQuizResult(null);
+                    setRandomLine(Math.floor(Math.random() * 4+1));//랜덤 호선 새로 돌리기 (다음 문제 시작)
+                }, 1500);
+
+                return filteredData;// 새로운 배열로 업데이트
+            });
+            console.log('일치하는 항목의 랜덤호선:', randomLine);
+        } else {
+            alert('틀렸지롱 ~ !')
+            // 오답 이미지 노출
+            setQuizResult('wrong');
+            quizResultEvent(); // 정답 이미지 노출
+            setTimeout(() => {
+                setQuizResult(null);
+            }, 1500);
+        }
+        
+        clickRef.current.classList.remove('on');
+        setInputValue(''); // input 초기화
+    }
+
+    // 정답 제출 - 엔터키
     const handleKeyUp = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();// 기본 동작(페이지 새로고침) 방지
-
-            console.log('내가 입력한 답안:', inputValue);
-    
-            // 역 이름이 일치하는 인덱스 찾기
-            const foundIndex = stationData.findIndex(item => item[1] === inputValue);
-            
-            // 정답을 찾았을 때
-            if (foundIndex !== -1) {
-                // 역 이름이 일치하는 항목을 찾아서 제외하고 새로운 배열로 설정
-                setStationData(prevStationData => {
-                    // 역 이름이 일치하지 않는 항목만 추려서 새로운 배열로 만듦
-                    const filteredData = prevStationData.filter(item => item[1] !== inputValue);
-                    
-                     // 중복 항목 제외하고 setMyAnswr에 추가
-                    const excludedItems = prevStationData.filter(item => item[1] === inputValue);
-                    setMyAnswr(prevAnswr => [...prevAnswr, ...excludedItems]);
-                    
-                    alert('야호 정답 ~ !')
-                    console.log('정답 !');
-                    
-                    setRandomLine(Math.floor(Math.random() * 4+1));//랜덤 호선 새로 돌리기 
-
-                    return filteredData;// 새로운 배열로 업데이트
-                });
-                console.log('일치하는 항목의 랜덤호선:', randomLine);
-            } else {
-                alert('틀렸지롱 ~ !')
-                console.log('일치하는 항목을 찾지 못했습니다.');
-            }
-            
-            clickRef.current.classList.remove('on');
-            setInputValue(''); // input 초기화
-        }
+            answerCheck();
+        };
     };
     
-    
-    //버튼 클릭 정답 제출
+    // 정답 제출 - 버튼 클릭
     const buttonClick = () => {
-        console.log('내가 입력한 답안:', inputValue);
-        clickRef.current.classList.remove('on');
-        setInputValue(''); // input 초기화
+        answerCheck();
     };
+
+    // 정답, 오답, 중복 이미지 노출
+    const quizResultEvent = () => {
+        if(quizResult === 'correct'){
+            console.log('correct')
+            return (
+                <>
+                    <img className='scoring' src={correctImg} alt="정답"/>
+                </>
+            )
+        }else if(quizResult === 'wrong'){
+            console.log('wrong')
+            return (
+                <>
+                    <img className='scoring' src={wrongImg} alt="오답"/>
+                </>
+            )
+        }else if(quizResult === 'duplicate'){
+            console.log('duplicate')
+            return (
+                <>
+                    <img className='scoring' src={duplicateImg} alt="중복"/>
+                </>
+            )
+        }else{
+            return null;
+        }
+    }
     
     // 결과 페이지로 이동
     const goResult = () => {
@@ -224,8 +278,8 @@ const Game = () => {
                     {/* 타이머 이미지 */}
                     {/* <img id="timer" className="timer" src={`./img/timer_${timer}s.png`} alt="타이머"/> */}
                 </div>
-                {/* 정답, 오답 팝업 */}
-                {/* <img className="scoring" id="scoring" src={correctImg} alt="정답"/> */}
+                {/* 정답, 오답, 중복 이미지 */}
+                {quizResultEvent()}
             </div>
             {/* <div className="result">
                 <div>
