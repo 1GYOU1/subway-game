@@ -10,12 +10,12 @@ import './css/style.css';
 
 function App() {
     return (
-        <div>
+        <div className="wrap">
             <Routes>
                 <Route path="/" element={<Intro />} />
                 <Route path="/start" element={<Start />} />
 				<Route path="/game" element={<Game />} />
-                <Route path="/result" element={<Result />} />
+                <Route path="/result/:scoreParams" element={<Result />} />
             </Routes>
         </div>
     );

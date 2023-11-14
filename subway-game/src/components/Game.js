@@ -1,27 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // image
+import miceImg from '../img/mice.png';
 import submitBtnImg from '../img/btn_submit.png';
 import clickImg from '../img/click.png';
 import correctImg from '../img/scoring1.png';
 import wrongImg from '../img/scoring2.png';
 import duplicateImg from '../img/scoring3.png';
-import levelImg1 from '../img/level1.png';
-import retryBtnImg from '../img/retry_btn.png';
 
 const Game = () => {
 
     let navigate = useNavigate();
 
     let clickRef = useRef();
+    let inputRef = useRef();
     
     const [randomLine, setRandomLine] = useState(Math.floor(Math.random() * 4+1))// 랜덤 호선 1~4
     const [inputValue, setInputValue] = useState(''); // input 데이터 입력
     const [myAnswr, setMyAnswr] = useState([]);// 맞은 문제 배열
     const [quizResult, setQuizResult] = useState(null);// 정답, 오답, 중복 이미지 노출
-    const [quizCount, setQuizCount] = useState(0);// 푼 퀴즈 개수
-    const [myScore, setMyScore] = useState(0);// 점수
+    const [quizCount, setQuizCount] = useState(1);// 퀴즈 타이틀
     const [timer, setTimer] = useState(10);// 타이머
+    const [myScore, setMyScore] = useState(0);// 맞은 갯수(점수)
 
     /*
         1. 0~4중에 랜덤으로 숫자 노출 - 한 문제마다 랜덤 돌리기
@@ -36,10 +36,13 @@ const Game = () => {
             ㄴ 같은 역이름을 가진 다른 호선 배열 값도 삭제(중복 체크), 내 맞춘 답안 정답 배열 setCorrect에 넣기
             ㄴ 이미 정답 배열에 있는 값이라면 중복 이미지 노출 
         6. 정답, 오답, 중복 이미지 노출
-
-        7. 10문제 진행 quizCount++
-        8. 타이머기능 10초
-        9. 결과 값 props로 전달
+            ㄴ 정답, 오답, 중복이면 다음 문제 노출
+            ㄴ 정답이면 quizCount++ (퀴즈 타이틀 숫자 + 1)
+            ㄴ 정답이면 myScore 점수 올리기 (한 문제당 + 10)
+        7. 최대 10문제 진행 quizCount++
+        8. 타이머기능 10초 -> 10초 지나면 게임 오버. (결과 페이지로)
+        9. 결과 값 params로 전달
+        10. 결과 페이지 노출
 
         --------------------
         10. 힌트 기능
@@ -91,7 +94,22 @@ const Game = () => {
         console.log(stationData)
         console.log('myAnswr',myAnswr);
         console.log('quizResult', quizResult)
-    }, [stationData, myAnswr, quizResult])
+        console.log('quizCount', quizCount)
+        console.log('myScore', myScore)
+        // 결과페이지 랜딩
+        if(quizCount > 10){
+            goResult();
+        }
+    }, [stationData, myAnswr, quizResult, myScore, quizCount])
+
+    // 타이머 기능
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setTimer((prevTimer) => prevTimer - 1);
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }) 
 
     if (loading) {
         return <div className='loading'>Loading...</div>;
@@ -150,58 +168,70 @@ const Game = () => {
 
     //정답 제출
     const answerCheck = () => {
+
         if (inputValue.trim() === '') {
             // 입력값이 비어있을 때 동작하지 않도록 처리
             return;
         }
 
         console.log('내가 입력한 답안:', inputValue);
-
-        // 이미 setMyAnswr에 같은 값이 있는지 확인 (중복 선별)
-        if (myAnswr.some(item => item[0] === randomLine && item[1] === inputValue)) {
-            alert('이미 입력한 답안입니다. 다른 답안을 입력해주세요.');
-            // 중복 이미지 노출
-            setQuizResult('duplicate');
-            quizResultEvent(); // 정답 이미지 노출
-            setTimeout(() => { // 이미지 노출 초기화
-                setQuizResult(null);
-            }, 1500);
-            setInputValue(''); // input 초기화
-            return;
-        }
     
         // 호선, 역 이름이 모두 일치하는 배열의 index 찾기
         const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);
 
-        if (foundIndex !== -1) {
+        // 이미 setMyAnswr에 같은 값이 있는지 확인 (중복 선별)
+        if (myAnswr.some(item => item[0] === randomLine && item[1] === inputValue)) {
+
+            // 중복 이미지 노출
+            setQuizResult('duplicate');
+            quizResultEvent();
+            setTimeout(() => { // 중복 이미지 노출 초기화
+                setQuizResult(null);
+            }, 1000);
+            setInputValue(''); // input 초기화
+
+        }else if (foundIndex !== -1) { // 정답일 경우
+
             setStationData(prevStationData => {
                 const filteredData = prevStationData.filter(item => item[1] !== inputValue);// 원본 배열에서 역 이름이 일치하는 항목 모두 제거
                 const excludedItems = prevStationData.filter(item => item[1] === inputValue);// 원본 배열에서 역 이름이 일치하는 항목 중복 답안 제출 방지를 위해 모두 setMyAnswr에 추가
                 setMyAnswr(prevAnswr => [...prevAnswr, ...excludedItems]);
                 
-                alert('야호 정답 ~ !')
+                // 정답 이미지 노출
                 setQuizResult('correct');
-                quizResultEvent(); // 정답 이미지 노출
-                setTimeout(() => {
+                quizResultEvent();
+                setTimeout(() => { // 정답 이미지 노출 초기화
                     setQuizResult(null);
-                    setRandomLine(Math.floor(Math.random() * 4+1));//랜덤 호선 새로 돌리기 (다음 문제 시작)
-                }, 1500);
+                }, 1000);
+
+                setMyScore((prevScore) => prevScore + 10); //점수 + 10
 
                 return filteredData;// 새로운 배열로 업데이트
+                
             });
+
             console.log('일치하는 항목의 랜덤호선:', randomLine);
-        } else {
-            alert('틀렸지롱 ~ !')
+
+        } else { // 오답일 경우
+
             // 오답 이미지 노출
             setQuizResult('wrong');
-            quizResultEvent(); // 정답 이미지 노출
-            setTimeout(() => {
+            quizResultEvent();
+            setTimeout(() => { // 오답 이미지 노출 초기화
                 setQuizResult(null);
-            }, 1500);
+            }, 1000);
         }
         
+        //정답, 오답, 중복 공통
         clickRef.current.classList.remove('on');
         setInputValue(''); // input 초기화
+
+        setTimeout(() => {
+            setRandomLine(Math.floor(Math.random() * 4+1));// 랜덤 호선 새로 돌리기 (다음 문제 시작)
+            setQuizCount((prevCount) => prevCount + 1);// 다음 문제로 넘어가기 ++1
+            setTimer(10);//타이머 초기화
+            console.log('내가 맞춘 문제 갯수', quizCount)
+        }, 1050);
     }
 
     // 정답 제출 - 엔터키
@@ -245,14 +275,26 @@ const Game = () => {
         }
     }
     
+    // 타이머
+    const timerEvent = () => {
+        if(3 < timer && timer <= 10){
+            return <img className="timer" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
+        }else if(0 <= timer && timer <= 3){
+            return <img className="timer on" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
+        }else{
+            goResult();//게임오버 ~ 결과페이지로
+        }
+    }    
+
     // 결과 페이지로 이동
     const goResult = () => {
-        navigate('/result');
+        navigate(`/result/${myScore}`);
     }
 
     return (
         <div className="wrap">
             <div className="quiz_area">
+                <strong className='quiz_count'>문제 {quizCount}</strong>
                 <div className={`quiz line${randomLine}`}>
                     <p><span>{randomLine}호선</span><br/> 역 이름은?</p>
                 </div>
@@ -261,6 +303,7 @@ const Game = () => {
                         <label htmlFor="subwayName">
                             {/* 답안 입력 */}
                             <input
+                                ref={inputRef}
                                 id="subwayName"
                                 type="text"
                                 placeholder=""
@@ -268,31 +311,21 @@ const Game = () => {
                                 value={inputValue}
                                 onKeyPress={handleKeyUp}
                                 onChange={handleInputChange}
+                                autoFocus
                             />
                         </label>
+                        <button id="answer_btn" type="submit" onClick={buttonClick}>
+                            <img ref={clickRef} className='click' src={clickImg} alt="클릭"/>
+                            <img src={submitBtnImg} alt="정답 제출하기"/>
+                        </button>
                     </form>
-                    <button id="answer_btn" type="submit" onClick={buttonClick}>
-                        <img ref={clickRef} className='click' src={clickImg} alt="클릭"/>
-                        <img src={submitBtnImg} alt="정답 제출하기"/>
-                    </button>
-                    {/* 타이머 이미지 */}
-                    {/* <img id="timer" className="timer" src={`./img/timer_${timer}s.png`} alt="타이머"/> */}
+                    <img className='mice' src={miceImg} alt="쥐"/>
                 </div>
                 {/* 정답, 오답, 중복 이미지 */}
                 {quizResultEvent()}
+                {/* 타이머 이미지 */}
+                {timerEvent()}
             </div>
-            {/* <div className="result">
-                <div>
-                    <img id="level_img" className="level_img" src={levelImg1} alt="level1"/>
-                    <p className="score">
-                        <strong><span id="my_score">100</span>점</strong>
-                        <span id="result_txt"></span>
-                    </p>
-                </div>
-                <button className="retry_btn">
-                    <img className="level_img" src={retryBtnImg} alt="다시하기"/>
-                </button>
-            </div> */}
         </div>
     );
 };
