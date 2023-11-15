@@ -45,7 +45,7 @@ const Game = () => {
         10. 결과 페이지 노출
 
         --------------------
-        10. 힌트 기능
+        11. 힌트 기능
             ㄴ 지하철 노선도 이미지 노출 ?
     */
 
@@ -96,7 +96,7 @@ const Game = () => {
         console.log('quizResult', quizResult)
         console.log('quizCount', quizCount)
         console.log('myScore', myScore)
-        // 결과페이지 랜딩
+        // 10문제 풀고 결과페이지 랜딩
         if(quizCount > 10){
             goResult();
         }

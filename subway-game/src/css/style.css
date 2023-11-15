@@ -59,7 +59,7 @@ ul,li,ol,dl {list-style:none}
 .quiz_area > div:first-of-type.line4{background-image:url("../img/q_line4.png");}
 .quiz_area > div:first-of-type.line4{background-image:url("../img/q_line4.png");}
 .quiz_area .quiz p{position:absolute;top:37px;left:50%;transform:translateX(-50%);margin-left:5px;width:75%;text-align:center;font-size:30px;font-weight:bold;font-family:'Gaegu',sans-serif;}
-.quiz_area .answer_area{width:270px;height:230px;margin:0 auto;background:url('../img/answer_area_4.png') center top/100% no-repeat;position:relative}
+.quiz_area .answer_area{width:270px;height:230px;margin:0 auto;background:url('../img/answer_area.png') center top/100% no-repeat;position:relative}
 .quiz_area .answer_area form label{position:absolute;top:26px;left:16px}
 .quiz_area .answer_area form label input{border:0;outline:0;width:212px;height:50px;line-height:50px;box-sizing:border-box;text-align:center;font-size:29px;font-weight:bold;font-family:'Gaegu',sans-serif;}
 .quiz_area .answer_area button{position:absolute;top:143px;right:0;width:130px;background:transparent;border:none;cursor:pointer;}
