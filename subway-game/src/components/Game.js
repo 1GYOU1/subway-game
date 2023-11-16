@@ -31,6 +31,7 @@ const Game = () => {
         3. input 입력 텍스트 받아오기
             ㄴ입력한 값 useState에 넣고(inputValue) 특수문자, 영어, 숫자 입력 제한
         4. input에 답안 입력 후 엔터키, 클릭 시 제출
+            ㄴ 자동 input focus
         5. 제출한 입력값이 api 요소의 호선(0번째 배열 요소값), 역 이름(1번째 배열 요소값)이 비교
             ㄴ 맞으면 원본배열에서 삭제, 내 맞춘 답안 정답 배열 setCorrect에 넣기
             ㄴ 같은 역이름을 가진 다른 호선 배열 값도 삭제(중복 체크), 내 맞춘 답안 정답 배열 setCorrect에 넣기
@@ -90,17 +91,24 @@ const Game = () => {
         console.log(stationData)
     }, []);
 
+    // 변수 확인
+    // useEffect(() => {
+    //     console.log(stationData)
+    //     console.log('myAnswr',myAnswr);
+    //     console.log('quizResult', quizResult)
+    //     console.log('quizCount', quizCount)
+    //     console.log('myScore', myScore)
+    // }, [stationData, myAnswr, quizResult, myScore, quizCount])
+    
+    // 10문제 풀고 결과페이지 랜딩, input focus
     useEffect(() => {
-        console.log(stationData)
-        console.log('myAnswr',myAnswr);
-        console.log('quizResult', quizResult)
-        console.log('quizCount', quizCount)
-        console.log('myScore', myScore)
-        // 10문제 풀고 결과페이지 랜딩
         if(quizCount > 10){
             goResult();
         }
-    }, [stationData, myAnswr, quizResult, myScore, quizCount])
+        if(inputRef.current && quizCount >= 0){
+            inputRef.current.focus();
+        }   
+    }, [quizCount])
 
     // 타이머 기능
     useEffect(() => {
@@ -292,7 +300,7 @@ const Game = () => {
     }
 
     return (
-        <div className="wrap">
+        <>
             <div className="quiz_area">
                 <strong className='quiz_count'>문제 {quizCount}</strong>
                 <div className={`quiz line${randomLine}`}>
@@ -326,7 +334,7 @@ const Game = () => {
                 {/* 타이머 이미지 */}
                 {timerEvent()}
             </div>
-        </div>
+        </>
     );
 };
 

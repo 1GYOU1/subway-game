@@ -29,7 +29,7 @@ const Start = () => {
     }
 
     return (
-        <div className='wrap'>
+        <>
             <div className="start_area">
                 <div className='top_area'>
                     <h1><img src={titImg} alt="제목"/></h1>
@@ -80,7 +80,7 @@ const Start = () => {
                     </p>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

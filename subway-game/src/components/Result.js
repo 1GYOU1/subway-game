@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import levelImg1 from '../img/level1.png';
 import levelImg2 from '../img/level2.png';
@@ -43,7 +43,7 @@ const Result = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<div className="result">
 				<div>
 					{resultEvent()}
@@ -52,7 +52,7 @@ const Result = () => {
 					<img className="level_img" src={retryBtnImg} alt="다시하기"/>
 				</button>
 			</div>
-		</div>
+		</>
 	)
 }
 

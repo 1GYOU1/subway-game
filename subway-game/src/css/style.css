@@ -4,12 +4,12 @@
 
 /* 초기화 */
 * {margin:0;padding:0;box-sizing:border-box;}
-html, body{color:#3d3d3d;font-family:'Noto Sans KR', sans-serif;font-weight:normal;overflow-x:hidden;background:#fff;}
+html, body{color:#3d3d3d;font-family:'Noto Sans KR', sans-serif;font-weight:normal;overflow:hidden;background:#fff;min-height:-webkit-fill-available !important;}
 a {color:#3d3d3d;text-decoration:none;}
 ul,li,ol,dl {list-style:none}
 
 /* 공통 */
-.wrap{max-width:750px;margin:0 auto;height:100%;background:#fff;overflow:hidden;}
+.wrap{max-width:750px;margin:0 auto;height:100vh;background:#fff;overflow:hidden;}
 
 /*Intro*/
 .loading{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;}
@@ -174,66 +174,80 @@ ul,li,ol,dl {list-style:none}
       opacity:1;
     }
 }
-  @keyframes blink-2 {
-    0% {
-      opacity:1;
-    }
-    50% {
-      opacity:0.2;
-    }
-    100% {
-      opacity:1;
-    }
+@keyframes blink-2 {
+	0% {
+	opacity:1;
+	}
+	50% {
+	opacity:0.2;
+	}
+	100% {
+	opacity:1;
+	}
 }
 @-webkit-keyframes timer-ani {
-    0% {
-      -webkit-transform: translate(0);
-              transform: translate(0);
-    }
-    20% {
-      -webkit-transform: translate(-2px, 2px);
-              transform: translate(-2px, 2px);
-    }
-    40% {
-      -webkit-transform: translate(-2px, -2px);
-              transform: translate(-2px, -2px);
-    }
-    60% {
-      -webkit-transform: translate(2px, 2px);
-              transform: translate(2px, 2px);
-    }
-    80% {
-      -webkit-transform: translate(2px, -2px);
-              transform: translate(2px, -2px);
-    }
-    100% {
-      -webkit-transform: translate(0);
-              transform: translate(0);
-    }
-  }
-  @keyframes timer-ani {
-    0% {
-        -webkit-transform: translate(0);
-                transform: translate(0);
-    }
-    20% {
-        -webkit-transform: translate(-2px, 2px);
-                transform: translate(-2px, 2px);
-    }
-    40% {
-        -webkit-transform: translate(-2px, -2px);
-                transform: translate(-2px, -2px);
-    }
-    60% {
-        -webkit-transform: translate(2px, 2px);
-                transform: translate(2px, 2px);
-    }
-    80% {
-        -webkit-transform: translate(2px, -2px);
-                transform: translate(2px, -2px);
-    }
-    100% {
-        -webkit-transform: translate(0);
-                transform: translate(0);
-    }
-  }
+	0% {
+		-webkit-transform: translate(0);
+				transform: translate(0);
+	}
+	20% {
+		-webkit-transform: translate(-2px, 2px);
+				transform: translate(-2px, 2px);
+	}
+	40% {
+		-webkit-transform: translate(-2px, -2px);
+				transform: translate(-2px, -2px);
+	}
+	60% {
+		-webkit-transform: translate(2px, 2px);
+				transform: translate(2px, 2px);
+	}
+	80% {
+		-webkit-transform: translate(2px, -2px);
+				transform: translate(2px, -2px);
+	}
+	100% {
+		-webkit-transform: translate(0);
+				transform: translate(0);
+	}
+}
+@keyframes timer-ani {
+	0% {
+		-webkit-transform: translate(0);
+				transform: translate(0);
+	}
+	20% {
+		-webkit-transform: translate(-2px, 2px);
+				transform: translate(-2px, 2px);
+	}
+	40% {
+		-webkit-transform: translate(-2px, -2px);
+				transform: translate(-2px, -2px);
+	}
+	60% {
+		-webkit-transform: translate(2px, 2px);
+				transform: translate(2px, 2px);
+	}
+	80% {
+		-webkit-transform: translate(2px, -2px);
+				transform: translate(2px, -2px);
+	}
+	100% {
+		-webkit-transform: translate(0);
+				transform: translate(0);
+	}
+}
+
+@media screen and (max-width:500px){
+	.quiz_area{height:50vh;}
+	.quiz_area > div:first-of-type{width:auto;height:auto;background-position:left top;background-size:60px;}
+	.quiz_area .quiz p{position:static;transform:unset;margin-left:80px;width:auto;text-align:left;font-size:30px;}
+	.quiz_area .answer_area{width:230px;height:180px;}
+	.quiz_area .answer_area form label{top:24px;left:10px;}
+	.quiz_area .answer_area form label input{width:185px;height:40px;line-height:40px;font-size:25px;}
+	.quiz_area .answer_area .mice{width:80px;top:90px;}
+	.quiz_area .answer_area button{top:123px;width:120px;}
+	.quiz_area .answer_area button .click.on{width:75px;top:-30px;left:-30px;}
+	.quiz_area .timer{width:70px;margin:0;position:absolute;top:4vw;right:4vw;}
+	.quiz_area .scoring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px;}
+}
