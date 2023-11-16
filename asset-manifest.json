@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/subway-game/static/css/main.d51d8ecf.css",
-    "main.js": "/subway-game/static/js/main.57c16b0c.js",
+    "main.css": "/subway-game/static/css/main.5caba38b.css",
+    "main.js": "/subway-game/static/js/main.17f792c6.js",
     "static/media/mice.png": "/subway-game/static/media/mice.f8acd4b3e8a9ed61beab.png",
     "static/media/level3.png": "/subway-game/static/media/level3.82c300a648570d220aee.png",
     "static/media/level2.png": "/subway-game/static/media/level2.50c365b13f2ca019a8ff.png",
@@ -11,18 +11,18 @@
     "static/media/scoring3.png": "/subway-game/static/media/scoring3.81581efa2e03efcbf8e5.png",
     "static/media/scoring2.png": "/subway-game/static/media/scoring2.fc26792cc9f4b1886799.png",
     "static/media/scoring1.png": "/subway-game/static/media/scoring1.6512c2f7268d74f3ecde.png",
-    "static/media/answer_area_4.png": "/subway-game/static/media/answer_area_4.bbef16b41e6237936ee1.png",
+    "static/media/answer_area.png": "/subway-game/static/media/answer_area.bbef16b41e6237936ee1.png",
     "static/media/btn_howto.png": "/subway-game/static/media/btn_howto.7741c2144f56513157c5.png",
     "static/media/tit.png": "/subway-game/static/media/tit.d6f0a7dc6b7b130f1086.png",
     "static/media/subway.jpg": "/subway-game/static/media/subway.940b42e9aa21a33f23ac.jpg",
     "static/media/btn_start.png": "/subway-game/static/media/btn_start.8c84d027a6c5f09b1a49.png",
     "static/media/retry_btn.png": "/subway-game/static/media/retry_btn.5d06224c6e20738d779a.png",
     "index.html": "/subway-game/index.html",
-    "main.d51d8ecf.css.map": "/subway-game/static/css/main.d51d8ecf.css.map",
-    "main.57c16b0c.js.map": "/subway-game/static/js/main.57c16b0c.js.map"
+    "main.5caba38b.css.map": "/subway-game/static/css/main.5caba38b.css.map",
+    "main.17f792c6.js.map": "/subway-game/static/js/main.17f792c6.js.map"
   },
   "entrypoints": [
-    "static/css/main.d51d8ecf.css",
-    "static/js/main.57c16b0c.js"
+    "static/css/main.5caba38b.css",
+    "static/js/main.17f792c6.js"
   ]
 }
