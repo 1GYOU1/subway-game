@@ -46,7 +46,8 @@ const Game = () => {
         10. 결과 페이지 노출
 
         --------------------
-        11. 힌트 기능
+        11. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출
+        12. 힌트 기능
             ㄴ 지하철 노선도 이미지 노출 ?
     */
 
@@ -118,6 +119,25 @@ const Game = () => {
 
         return () => clearInterval(intervalId);
     }) 
+
+    // 모바일 웹 100vh 스크롤 생기는 현상 수정
+    useEffect(() => {
+        const handleResize = () => {
+          let vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+    
+        // 초기 로드 시 실행
+        handleResize();
+    
+        // 리사이즈 이벤트에 대한 이벤트 리스너 추가
+        window.addEventListener('resize', handleResize);
+    
+        // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
 
     if (loading) {
         return <div className='loading'>Loading...</div>;

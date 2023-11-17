@@ -239,6 +239,7 @@ ul,li,ol,dl {list-style:none}
 }
 
 @media screen and (max-width:500px){
+	.wrap{height: calc(var(--var, 1vh) * 100);}
 	.quiz_area{height:50vh;}
 	.quiz_area > div:first-of-type{width:auto;height:auto;background-position:left top;background-size:60px;}
 	.quiz_area .quiz p{position:static;transform:unset;margin-left:80px;width:auto;text-align:left;font-size:30px;}
