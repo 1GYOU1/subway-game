@@ -3,6 +3,7 @@ import React from 'react';
 
 import Intro from "./components/Intro";
 import Start from "./components/Start";
+import Select from "./components/Select";
 import Game from "./components/Game";
 import Result from "./components/Result";
 
@@ -14,7 +15,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Intro />} />
                 <Route path="/start" element={<Start />} />
-				<Route path="/game" element={<Game />} />
+                <Route path="/select" element={<Select />} />
+				<Route path="/game/:selectedLinesParams" element={<Game />} />
                 <Route path="/result/:scoreParams" element={<Result />} />
             </Routes>
         </div>

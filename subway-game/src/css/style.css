@@ -2,22 +2,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
 
-/* 초기화 */
+/* reset */
 * {margin:0;padding:0;box-sizing:border-box;}
 html, body{color:#3d3d3d;font-family:'Noto Sans KR', sans-serif;font-weight:normal;overflow:hidden;background:#fff;min-height:-webkit-fill-available !important;}
 a {color:#3d3d3d;text-decoration:none;}
 ul,li,ol,dl {list-style:none}
 
-/* 공통 */
+/* common */
 .wrap{max-width:750px;margin:0 auto;height:100vh;background:#fff;overflow:hidden;}
 
-/*Intro*/
+/* Intro */
 .loading{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;}
 .loading .character_area{position:relative;}
 .loading .mice{width:200px;animation:walk 3s ease-in-out both;}
 .loading .dungdung{width:140px;position:absolute;top:-100px;right:-52px;animation:fadeIn .5s 3s ease-in-out both;opacity:0}
 
-/*Start*/
+/* Start */
 .start_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;}
 .start_area h1{width:100%;text-align:center;margin-top:135px;margin-left:20px;}
 .start_area h1 img{width:250px;animation:to-top .5s ease-in-out both;opacity:0;}
@@ -41,7 +41,7 @@ ul,li,ol,dl {list-style:none}
 .start_area .btn_wrap li:hover .btn{animation:bounce-to .8s ease-in-out both;}
 .start_area .btn_wrap li .mice{width:70px;position:absolute;top:-10px;right:-80px;display:none}
 .start_area .btn_wrap li:hover .mice{display:block}
-/*popup*/
+/* popup */
 .popup{display:none}
 .popup .bg{width:100%;height:100%;background:#000;opacity:0.5;position:fixed;top:0;left:0}
 .popup .cont{width:300px;background:#fff;padding:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:10px;}
@@ -49,6 +49,9 @@ ul,li,ol,dl {list-style:none}
 .popup .cont .close {position:absolute;top:5px;right:10px;}
 .popup .cont .close:after{content:"\00d7"; font-size:20px;}
 .popup .cont span{color:red;font-weight:bold;}
+
+/* select */
+.select_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;}
 
 /* game */
 .quiz_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;}
@@ -71,7 +74,7 @@ ul,li,ol,dl {list-style:none}
 .quiz_area .timer.on{-webkit-animation: timer-ani 0.3s linear infinite both;animation: timer-ani 0.3s linear infinite both;}
 .quiz_area .scoring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;}
 
-/*result*/
+/* result */
 .result{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;}
 .result .level_img{width:230px;margin:0 auto;display:block}
 .result .score{font-size:50px;text-align:center;font-family:'Gaegu',sans-serif;margin:15px 0;}
@@ -238,6 +241,7 @@ ul,li,ol,dl {list-style:none}
 	}
 }
 
+/* mobille */
 @media screen and (max-width:500px){
 	.wrap{height: calc(var(--var, 1vh) * 100);}
 	.quiz_area{height:50vh;}

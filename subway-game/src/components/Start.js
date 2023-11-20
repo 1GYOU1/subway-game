@@ -16,9 +16,9 @@ const Start = () => {
     let navigate = useNavigate();
     let popRef = useRef();
 
-    const goGame = () => {
+    const goSelect = () => {
         setTimeout(() => {
-            navigate('/game');
+            navigate('/select');
         }, 1200);
     }
     const popOpen = () => {
@@ -52,7 +52,7 @@ const Start = () => {
 
                 <ul className="btn_wrap">
                     <li>
-                        <button onClick={goGame}>
+                        <button onClick={goSelect}>
                             <img className="btn" src={startBtnImg} alt="시작버튼"/>
                         </button>
                         <img className="mice" src={miceImg} alt="시골쥐"/>
@@ -73,7 +73,8 @@ const Start = () => {
                         랜덤으로 나오는 지하철 호선에
                         <br/>정답을 입력해 주세요~
                         <br/>중복으로 정답 입력시 오답처리됩니다.
-                        <br/>한 문제당 10초안에 풀어주세요
+                        <br/>한 문제당 10초안에 풀어주세요.
+                        <br/>제한 시간이 지나면 게임오버 !
                         <br/>
                         <br/><span>*'역'을 제외하고 입력해주세요
                         <br/>예: 강남역 → 강남</span>

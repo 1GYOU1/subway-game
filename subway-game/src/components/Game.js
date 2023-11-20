@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 // image
 import miceImg from '../img/mice.png';
 import submitBtnImg from '../img/btn_submit.png';
@@ -9,6 +9,8 @@ import wrongImg from '../img/scoring2.png';
 import duplicateImg from '../img/scoring3.png';
 
 const Game = () => {
+
+	const { selectedLinesParams } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
 
     let navigate = useNavigate();
 
@@ -42,13 +44,17 @@ const Game = () => {
             ㄴ 정답이면 myScore 점수 올리기 (한 문제당 + 10)
         7. 최대 10문제 진행 quizCount++
         8. 타이머기능 10초 -> 10초 지나면 게임 오버. (결과 페이지로)
-        9. 결과 값 params로 전달
-        10. 결과 페이지 노출
+        9. 새로 고침 방지
+        10. 결과 값 params로 전달
+        11. 결과 페이지 노출 (상, 중, 하)
 
         --------------------
-        11. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출
-        12. 힌트 기능
+        12. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출 (옵션은 1, 2, 3, 4호선)
+        13. 힌트 기능
             ㄴ 지하철 노선도 이미지 노출 ?
+        14. hidden stage
+            ㄴ 움직이는 쥐 클릭 시 히든 게임 시작
+            ㄴ 색 반전, 빠른 시간안에 ..문제 맞추면 ... ?
     */
 
     //Api
@@ -100,7 +106,7 @@ const Game = () => {
     //     console.log('quizCount', quizCount)
     //     console.log('myScore', myScore)
     // }, [stationData, myAnswr, quizResult, myScore, quizCount])
-    
+
     // 10문제 풀고 결과페이지 랜딩, input focus
     useEffect(() => {
         if(quizCount > 10){
@@ -120,7 +126,21 @@ const Game = () => {
         return () => clearInterval(intervalId);
     }) 
 
-    // 모바일 웹 100vh 스크롤 생기는 현상 수정
+    // 새로고침 방지
+    const preventClose = (e) => {
+        e.preventDefault();  
+        e.returnValue = ""; 
+    }; 
+    useEffect(() => {  
+        (() => {
+        window.addEventListener("beforeunload", preventClose);  
+        })();   
+
+        return () => {    
+        window.removeEventListener("beforeunload", preventClose);  
+    };}, []);
+
+    // 모바일 웹 100vh 스크롤 생기는 현상 수정 (참고 - https://jmjmjm.tistory.com/126)
     useEffect(() => {
         const handleResize = () => {
           let vh = window.innerHeight * 0.01;
@@ -258,7 +278,7 @@ const Game = () => {
             setRandomLine(Math.floor(Math.random() * 4+1));// 랜덤 호선 새로 돌리기 (다음 문제 시작)
             setQuizCount((prevCount) => prevCount + 1);// 다음 문제로 넘어가기 ++1
             setTimer(10);//타이머 초기화
-            console.log('내가 맞춘 문제 갯수', quizCount)
+            console.log('문제 번호', quizCount)
         }, 1050);
     }
 
