@@ -10,20 +10,18 @@ import duplicateImg from '../img/scoring3.png';
 
 const Game = () => {
 
-	const { selectedLinesParams } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
-
     let navigate = useNavigate();
 
     let clickRef = useRef();
     let inputRef = useRef();
     
-    const [randomLine, setRandomLine] = useState(Math.floor(Math.random() * 4+1))// 랜덤 호선 1~4
     const [inputValue, setInputValue] = useState(''); // input 데이터 입력
     const [myAnswr, setMyAnswr] = useState([]);// 맞은 문제 배열
     const [quizResult, setQuizResult] = useState(null);// 정답, 오답, 중복 이미지 노출
     const [quizCount, setQuizCount] = useState(1);// 퀴즈 타이틀
     const [timer, setTimer] = useState(10);// 타이머
     const [myScore, setMyScore] = useState(0);// 맞은 갯수(점수)
+    
 
     /*
         1. 0~4중에 랜덤으로 숫자 노출 - 한 문제마다 랜덤 돌리기
@@ -57,12 +55,27 @@ const Game = () => {
             ㄴ 색 반전, 빠른 시간안에 ..문제 맞추면 ... ?
     */
 
+    //select -> game으로 호선 전달
+    const { selectedLinesParams } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
+    const [selectedLines, setSelectedLines] = useState()// 전달 받은 호선 배열 형태로 저장
+
+    const [randomLine, setRandomLine] = useState()// 랜덤 호선 1~4 (selectedLines -> 저장)
+    
     //Api
     const [loading, setLoading] = useState(true); // 데이터 로딩
     const [error, setError] = useState(null); // 데이터 로딩 중 오류
     const [stationData, setStationData] = useState([]); // LINE_NUM 및 STATION_NM을 저장할 배열
 
     useEffect(() => {
+        // select 컴포넌트에서 전달 받은 호선 정보 배열로 담기
+        if (selectedLinesParams) {
+            const linesArray = selectedLinesParams.split(',');
+            setSelectedLines(linesArray);
+            // console.log('linesArray', linesArray); // [1, 2, 3, 4] 형태
+            const randomIndex = Math.floor(Math.random() * linesArray.length);
+            setRandomLine(linesArray[randomIndex]);
+            // console.log('randomLine', linesArray[randomIndex]);
+          }
         async function fetchData() {
             try {
                 const apiUrl = `${process.env.REACT_APP_API}`;
@@ -106,6 +119,10 @@ const Game = () => {
     //     console.log('quizCount', quizCount)
     //     console.log('myScore', myScore)
     // }, [stationData, myAnswr, quizResult, myScore, quizCount])
+
+    useEffect(() => {
+        console.log(randomLine)
+    }, [randomLine])
 
     // 10문제 풀고 결과페이지 랜딩, input focus
     useEffect(() => {
@@ -275,7 +292,7 @@ const Game = () => {
         setInputValue(''); // input 초기화
 
         setTimeout(() => {
-            setRandomLine(Math.floor(Math.random() * 4+1));// 랜덤 호선 새로 돌리기 (다음 문제 시작)
+            // setRandomLine(Math.floor(Math.random() * 4+1));// 랜덤 호선 새로 돌리기 (다음 문제 시작)
             setQuizCount((prevCount) => prevCount + 1);// 다음 문제로 넘어가기 ++1
             setTimer(10);//타이머 초기화
             console.log('문제 번호', quizCount)
