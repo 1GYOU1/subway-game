@@ -25,6 +25,7 @@ const Game = () => {
 
     /*
         1. 0~4중에 랜덤으로 숫자 노출 - 한 문제마다 랜덤 돌리기
+            ㄴ Select 컴포넌트에서 선택한 호선 배열로 가져오고 index 랜덤으로 돌려서 출력
         2. api 맨 처음 한번만 가져오기. ex - {['01호선', '평택역']}
             ㄴ 필요한 형태로 가져오기{{ LINE_NUM, STATION_NM }, [1, 평택], [1, 금정]}
             ㄴ 서울역 예외처리-=98
@@ -50,15 +51,13 @@ const Game = () => {
         12. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출 (옵션은 1, 2, 3, 4호선)
         13. 힌트 기능
             ㄴ 지하철 노선도 이미지 노출 ?
-        14. hidden stage
-            ㄴ 움직이는 쥐 클릭 시 히든 게임 시작
-            ㄴ 색 반전, 빠른 시간안에 ..문제 맞추면 ... ?
+        14. Next stage
+            ㄴ 1~9호선 랜덤 노출 5초 안에 맞추기
     */
 
     //select -> game으로 호선 전달
     const { selectedLinesParams } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
-    const [selectedLines, setSelectedLines] = useState()// 전달 받은 호선 배열 형태로 저장
-
+    const [selectedLines, setSelectedLines] = useState()// 전달 받은 호선 배열 형태로 저장. 2번 문제부터 사용
     const [randomLine, setRandomLine] = useState()// 랜덤 호선 1~4 (selectedLines -> 저장)
     
     //Api
@@ -67,15 +66,6 @@ const Game = () => {
     const [stationData, setStationData] = useState([]); // LINE_NUM 및 STATION_NM을 저장할 배열
 
     useEffect(() => {
-        // select 컴포넌트에서 전달 받은 호선 정보 배열로 담기
-        if (selectedLinesParams) {
-            const linesArray = selectedLinesParams.split(',');
-            setSelectedLines(linesArray);
-            // console.log('linesArray', linesArray); // [1, 2, 3, 4] 형태
-            const randomIndex = Math.floor(Math.random() * linesArray.length);
-            setRandomLine(linesArray[randomIndex]);
-            // console.log('randomLine', linesArray[randomIndex]);
-          }
         async function fetchData() {
             try {
                 const apiUrl = `${process.env.REACT_APP_API}`;
@@ -113,16 +103,37 @@ const Game = () => {
 
     // 변수 확인
     // useEffect(() => {
-    //     console.log(stationData)
-    //     console.log('myAnswr',myAnswr);
-    //     console.log('quizResult', quizResult)
+        // console.log(stationData)
+        // console.log('myAnswr',myAnswr);
+        // console.log('quizResult', quizResult)
     //     console.log('quizCount', quizCount)
     //     console.log('myScore', myScore)
-    // }, [stationData, myAnswr, quizResult, myScore, quizCount])
+        // console.log('여기는 랜덤 몇 호선 ?',randomLine)
+    // }, [stationData, myAnswr, quizResult, myScore, quizCount, randomLine])
 
+    /*
+        select 컴포넌트에서 전달 받은 호선 정보 배열로 담고, 랜덤 호선 만들기
+        진입 후 최초 1번만 실행.
+        * 페이지 진입 시 selectedLines가 null 값이기 때문에 error남. 
+        여기서 값을 부여하고 2번 문제부터 랜덤 호선은 randomEvent(selectedLines) 함수 실행
+    */
     useEffect(() => {
-        console.log(randomLine)
-    }, [randomLine])
+        if (selectedLinesParams) {
+            // select 컴포넌트에서 전달 받은 호선 정보 배열로 담기
+            const linesArray = selectedLinesParams.split(',');
+            setSelectedLines(linesArray);
+            // console.log('selectedLines', linesArray); // [1, 2, 3, 4] 형태로 저장
+            const randomIndex = Math.floor(Math.random() * linesArray.length);
+            setRandomLine(parseInt(linesArray[randomIndex]));
+        }
+    }, []);
+        
+
+    // 랜덤 호선
+    const randomEvent = (lineArr) =>{
+        const randomIndex = Math.floor(Math.random() * lineArr.length);
+        setRandomLine(parseInt(lineArr[randomIndex]));
+    }
 
     // 10문제 풀고 결과페이지 랜딩, input focus
     useEffect(() => {
@@ -150,11 +161,11 @@ const Game = () => {
     }; 
     useEffect(() => {  
         (() => {
-        window.addEventListener("beforeunload", preventClose);  
+            window.addEventListener("beforeunload", preventClose);  
         })();   
 
         return () => {    
-        window.removeEventListener("beforeunload", preventClose);  
+            window.removeEventListener("beforeunload", preventClose);  
     };}, []);
 
     // 모바일 웹 100vh 스크롤 생기는 현상 수정 (참고 - https://jmjmjm.tistory.com/126)
@@ -238,8 +249,11 @@ const Game = () => {
             // 입력값이 비어있을 때 동작하지 않도록 처리
             return;
         }
-
+        console.log('지하철 전체:', stationData);
         console.log('내가 입력한 답안:', inputValue);
+        console.log('랜덤 호선 어딘데', randomLine);
+        console.log('item[0] === randomLine', stationData.findIndex(item => item[0] === randomLine))
+        console.log('item[1] === inputValue)', stationData.findIndex(item => item[1] === inputValue))
     
         // 호선, 역 이름이 모두 일치하는 배열의 index 찾기
         const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);
@@ -292,10 +306,10 @@ const Game = () => {
         setInputValue(''); // input 초기화
 
         setTimeout(() => {
-            // setRandomLine(Math.floor(Math.random() * 4+1));// 랜덤 호선 새로 돌리기 (다음 문제 시작)
+            randomEvent(selectedLines);// 랜덤 호선 새로 돌리기 (다음 문제 시작)
             setQuizCount((prevCount) => prevCount + 1);// 다음 문제로 넘어가기 ++1
             setTimer(10);//타이머 초기화
-            console.log('문제 번호', quizCount)
+            // console.log('문제 번호', quizCount)
         }, 1050);
     }
 
