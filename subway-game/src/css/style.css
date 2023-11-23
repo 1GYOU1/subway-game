@@ -75,7 +75,7 @@ ul,li,ol,dl {list-style:none}
 
 /* go - nextstage */
 .next_go{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;}
-.next_go strong{font-size:80px;font-family:'Gaegu',sans-serif;}
+.next_go strong{font-size:68px;font-family:'Gaegu',sans-serif;}
 .next_go .game_txt{position:relative;-webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 .next_go .start_txt{-webkit-animation: slide-in-right 0.5s 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;animation: slide-in-right 0.5s 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 
@@ -110,12 +110,13 @@ ul,li,ol,dl {list-style:none}
 
 /* result */
 .result_area{width:100%;height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;}
-.result_area .level_img{width:230px;margin:0 auto;display:block}
-.result_area .score{font-size:50px;text-align:center;font-family:'Gaegu',sans-serif;margin:15px 0;}
-.result_area .result_txt{display:block;padding:25px;border-radius:10px;background:#eef5ff;font-size:18px;text-align:center;width:350px;margin:0 auto;}
-.result_area .retry_btn{display:block;width:180px;margin:30px auto 0 auto;background:#fff;border:none;cursor:pointer;}
-.result_area .retry_btn img{width:100%;}
-.result_area .retry_btn:hover img{animation:bounce-to .8s ease-in-out both;}
+.result_area .level_img{width:215px;margin:0 auto;display:block;}
+.result_area .score{font-size:46px;text-align:center;font-family:'Gaegu',sans-serif;margin:12px 0;}
+.result_area .result_txt{display:block;padding:20px;border-radius:10px;background:#eef5ff;font-size:16px;text-align:center;width:330px;margin:0 auto;}
+.result_area button{display:block;width:140px;margin:20px auto 0 auto;background:#fff;border:none;cursor:pointer;}
+.result_area button:nth-of-type(2){margin-top:10px;}
+.result_area button img{width:100%}
+.result_area button:hover img{animation:bounce-to .8s ease-in-out both;}
 
 /* animation */
 @keyframes walk {
@@ -141,8 +142,8 @@ ul,li,ol,dl {list-style:none}
 }
 @keyframes bounce-to{
     0% {
-        -webkit-transform:translateY(-20px);
-        transform:translateY(-20px);
+        -webkit-transform:translateY(-15px);
+        transform:translateY(-15px);
         -webkit-animation-timing-function:ease-in;
         animation-timing-function:ease-in;
         opacity:1;
@@ -151,8 +152,8 @@ ul,li,ol,dl {list-style:none}
         opacity:1;
     }
     40% {
-        -webkit-transform:translateY(-15px);
-        transform:translateY(-15px);
+        -webkit-transform:translateY(-10px);
+        transform:translateY(-10px);
         -webkit-animation-timing-function:ease-in;
         animation-timing-function:ease-in;
     }

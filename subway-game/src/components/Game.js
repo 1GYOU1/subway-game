@@ -19,7 +19,8 @@ const Game = () => {
     const [myAnswr, setMyAnswr] = useState([]);// 맞은 문제 배열
     const [quizResult, setQuizResult] = useState(null);// 정답, 오답, 중복 이미지 노출
     const [quizCount, setQuizCount] = useState(1);// 퀴즈 타이틀
-    const [timer, setTimer] = useState(10);// 타이머
+    const [timer, setTimer] = useState(10);// 기본 타이머 (10초)
+    const [nextStageTimer, setNextStageTimer] = useState(5);// nextStage 타이머 (5초)
     const [myScore, setMyScore] = useState(0);// 맞은 갯수(점수)
     
 
@@ -146,21 +147,42 @@ const Game = () => {
 
     useEffect(() => {
         // 타이머 기능
-        const intervalId = setInterval(() => {
-            setTimer((prevTimer) => prevTimer - 1);
-        }, 1000);
+        if(params === 'nextStage'){// nextStage 랜덤 호출
+            // 5초 타이머
+            const intervalId = setInterval(() => {
+                setNextStageTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
 
-        // 10문제 풀고 결과페이지 랜딩, input focus
-        if (quizCount > 10) {
-            // clearInterval(intervalId)// Clear 타이머
-            goResult();
-        }
-        if (inputRef.current && quizCount >= 0) {
-            inputRef.current.focus();
-        }
+            // 10문제 풀고 결과페이지 랜딩, input focus
+            if (quizCount > 10) {
+                // clearInterval(intervalId)// Clear 타이머
+                goResult();// <- 수정해야함. goNextStageResult();
+            }
+            if (inputRef.current && quizCount >= 0) {
+                inputRef.current.focus();
+            }
 
-        // Clear 타이머
-        return () => clearInterval(intervalId);
+            // Clear 타이머
+            return () => clearInterval(intervalId);
+
+        }else{
+            // 10초 타이머
+            const intervalId = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+
+            // 10문제 풀고 결과페이지 랜딩, input focus
+            if (quizCount > 10) {
+                // clearInterval(intervalId)// Clear 타이머
+                goResult();
+            }
+            if (inputRef.current && quizCount >= 0) {
+                inputRef.current.focus();
+            }
+
+            // Clear 타이머
+            return () => clearInterval(intervalId);
+        }
     }, [quizCount]);
 
     // 새로고침 방지
@@ -317,7 +339,13 @@ const Game = () => {
         setTimeout(() => {
             randomEvent(selectedLines);// 랜덤 호선 새로 돌리기 (다음 문제 시작)
             setQuizCount((prevCount) => prevCount + 1);// 다음 문제로 넘어가기 ++1
-            setTimer(10);//타이머 초기화
+            if(params === 'nextStage'){
+                console.log('타이머 nextStage 되나 ?')
+                setNextStageTimer(5);//타이머 초기화
+            }else if(params){
+                setTimer(10);//타이머 초기화 
+            }
+            // setTimer(10);//타이머 초기화
             // console.log('문제 번호', quizCount)
         }, 1050);
     }
@@ -365,18 +393,32 @@ const Game = () => {
     
     // 타이머
     const timerEvent = () => {
-        if(3 < timer && timer <= 10){
-            return <img className="timer" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
-        }else if(0 <= timer && timer <= 3){
-            return <img className="timer on" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
+        if(params === 'nextStage'){
+            if(3 < nextStageTimer && nextStageTimer <= 5){
+                return <img className="timer" src={`${process.env.PUBLIC_URL}/images/timer_${nextStageTimer}s.png`} alt={`타이머`} />;
+            }else if(0 <= nextStageTimer && nextStageTimer <= 3){
+                return <img className="timer on" src={`${process.env.PUBLIC_URL}/images/timer_${nextStageTimer}s.png`} alt={`타이머`} />;
+            }else{
+                goResult();//게임오버 ~ 결과페이지로 <-  수정해야하는 영역
+            }
         }else{
-            goResult();//게임오버 ~ 결과페이지로
+            if((3 < timer && timer <= 10)){
+                return <img className="timer" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
+            }else if((0 <= timer && timer <= 3)){
+                return <img className="timer on" src={`${process.env.PUBLIC_URL}/images/timer_${timer}s.png`} alt={`타이머`} />;
+            }else{
+                goResult();//게임오버 ~ 결과페이지로
+            }
         }
     }    
 
     // 결과 페이지로 이동
     const goResult = () => {
-        navigate(`/result/${myScore}`);
+        if(params === 'nextStage'){
+            navigate(`/result/${params}/${myScore}`);
+        }else{
+            navigate(`/result/${myScore}`);
+        }
     }
 
     return (
