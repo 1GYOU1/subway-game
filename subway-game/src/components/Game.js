@@ -24,7 +24,10 @@ const Game = () => {
     
 
     /*
-        1. 0~4중에 랜덤으로 숫자 노출 - 한 문제마다 랜덤 돌리기
+        1. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출 (Select.js)
+            ㄴ 옵션은 1, 2, 3, 4호선
+        1. 0~4중에 랜덤으로 숫자 노출 
+            ㄴ한 문제마다 랜덤 돌리기
             ㄴ Select 컴포넌트에서 선택한 호선 배열로 가져오고 index 랜덤으로 돌려서 출력
         2. api 맨 처음 한번만 가져오기. ex - {['01호선', '평택역']}
             ㄴ 필요한 형태로 가져오기{{ LINE_NUM, STATION_NM }, [1, 평택], [1, 금정]}
@@ -46,19 +49,20 @@ const Game = () => {
         9. 새로 고침 방지
         10. 결과 값 params로 전달
         11. 결과 페이지 노출 (상, 중, 하)
-
-        --------------------
-        12. 체크박스로 노선 선택해서 선택한 노선만 랜덤 호출 (옵션은 1, 2, 3, 4호선)
-        13. 힌트 기능
-            ㄴ 지하철 노선도 이미지 노출 ?
-        14. Next stage
-            ㄴ 1~9호선 랜덤 노출 5초 안에 맞추기
+        13. Next stage
+            ㄴ nextStage intro.js
+            ㄴ nextStage Go.js
+            ㄴ 1~9호선 랜덤 노출
+        --------------------            
+            ㄴ 5초 안에 맞추기
     */
 
     //select -> game으로 호선 전달
-    const { selectedLinesParams } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
-    const [selectedLines, setSelectedLines] = useState()// 전달 받은 호선 배열 형태로 저장. 2번 문제부터 사용
-    const [randomLine, setRandomLine] = useState()// 랜덤 호선 1~4 (selectedLines -> 저장)
+    const { params } = useParams();// Select 컴포넌트에서 선택한 호선 전달 값
+    const [selectedLines, setSelectedLines] = useState();// 전달 받은 호선 배열 형태로 저장. 2번 문제부터 사용
+    const [randomLine, setRandomLine] = useState();// 랜덤 호선 1~4 (selectedLines -> 저장)
+    // nextStage 전용 호선
+    const [nextStageLines, setNextStageLines] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     
     //Api
     const [loading, setLoading] = useState(true); // 데이터 로딩
@@ -118,9 +122,14 @@ const Game = () => {
         여기서 값을 부여하고 2번 문제부터 랜덤 호선은 randomEvent(selectedLines) 함수 실행
     */
     useEffect(() => {
-        if (selectedLinesParams) {
+        if(params === 'nextStage'){// nextStage 랜덤 호출
+            setSelectedLines(nextStageLines)
+            const randomIndex = Math.floor(Math.random() * nextStageLines.length);
+            setRandomLine(parseInt(nextStageLines[randomIndex]));
+            console.log('nextStageLines', nextStageLines) // [1, 2, 3, 4, 5, 6 ,7, 8, 9]
+        }else if(params){
             // select 컴포넌트에서 전달 받은 호선 정보 배열로 담기
-            const linesArray = selectedLinesParams.split(',');
+            const linesArray = params.split(',');
             setSelectedLines(linesArray);
             // console.log('selectedLines', linesArray); // [1, 2, 3, 4] 형태로 저장
             const randomIndex = Math.floor(Math.random() * linesArray.length);
@@ -135,24 +144,24 @@ const Game = () => {
         setRandomLine(parseInt(lineArr[randomIndex]));
     }
 
-    // 10문제 풀고 결과페이지 랜딩, input focus
     useEffect(() => {
-        if(quizCount > 10){
-            goResult();
-        }
-        if(inputRef.current && quizCount >= 0){
-            inputRef.current.focus();
-        }   
-    }, [quizCount])
-
-    // 타이머 기능
-    useEffect(() => {
+        // 타이머 기능
         const intervalId = setInterval(() => {
             setTimer((prevTimer) => prevTimer - 1);
         }, 1000);
 
+        // 10문제 풀고 결과페이지 랜딩, input focus
+        if (quizCount > 10) {
+            // clearInterval(intervalId)// Clear 타이머
+            goResult();
+        }
+        if (inputRef.current && quizCount >= 0) {
+            inputRef.current.focus();
+        }
+
+        // Clear 타이머
         return () => clearInterval(intervalId);
-    }) 
+    }, [quizCount]);
 
     // 새로고침 방지
     const preventClose = (e) => {
@@ -188,11 +197,11 @@ const Game = () => {
       }, []);
 
     if (loading) {
-        return <div className='loading'>Loading...</div>;
+        return <div className='loading'><strong>Loading...</strong></div>;
     }
     
     if (error) {
-    return <div className='loading'>Error: {error.message}</div>;
+    return <div className='error'>Error: {error.message}</div>;
     }
 
     // 정답 입력
@@ -249,11 +258,11 @@ const Game = () => {
             // 입력값이 비어있을 때 동작하지 않도록 처리
             return;
         }
-        console.log('지하철 전체:', stationData);
-        console.log('내가 입력한 답안:', inputValue);
-        console.log('랜덤 호선 어딘데', randomLine);
-        console.log('item[0] === randomLine', stationData.findIndex(item => item[0] === randomLine))
-        console.log('item[1] === inputValue)', stationData.findIndex(item => item[1] === inputValue))
+        // console.log('지하철 전체:', stationData);
+        // console.log('내가 입력한 답안:', inputValue);
+        // console.log('랜덤 호선 어딘데', randomLine);
+        // console.log('item[0] === randomLine', stationData.findIndex(item => item[0] === randomLine))
+        // console.log('item[1] === inputValue)', stationData.findIndex(item => item[1] === inputValue))
     
         // 호선, 역 이름이 모두 일치하는 배열의 index 찾기
         const foundIndex = stationData.findIndex(item => item[0] === randomLine && item[1] === inputValue);

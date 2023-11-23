@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
 import levelImg1 from '../img/level1.png';
@@ -8,7 +8,19 @@ import retryBtnImg from '../img/retry_btn.png';
 
 const Result = () => {
 	let navigate = useNavigate();
-	const { scoreParams } = useParams();// 점수
+	const { scoreParams } = useParams();// 전달 받은 점수
+	const [loading, setLoading] = useState(true);// 로딩 화면
+
+	const [nextStageGo, setNextStageGo] = useState('nextStage'); // nextStage로 이동
+
+	// 로딩 화면
+	useEffect(() => {
+        const loadingShow = setTimeout(() => {
+            setLoading(false);
+        }, 1500);
+
+        return () => clearTimeout(loadingShow);
+    }, []);
 
 	const resultEvent = () => {
 		if(scoreParams <= 30){
@@ -38,20 +50,37 @@ const Result = () => {
 		}
 	}
 
+	// start 이동
 	const retryEvent = () => {
 		navigate('/start');
 	}
 
+	// intro/nextStage 이동
+	const nextStageEvent = () => {
+		navigate(`/${nextStageGo}`);
+	}
+
 	return (
 		<>
-			<div className="result">
-				<div>
-					{resultEvent()}
-				</div>
-				<button className="retry_btn" onClick={retryEvent}>
-					<img className="level_img" src={retryBtnImg} alt="다시하기"/>
-				</button>
-			</div>
+			{loading ? (
+                <div className="loading">
+                    <strong>Loading...</strong>
+                </div>
+            ) : (
+                <div className="result_area">
+                    <div>
+                        {resultEvent()}
+                    </div>
+                    <button className="retry_btn" onClick={retryEvent}>
+                        <img className="level_img" src={retryBtnImg} alt="다시하기" />
+                    </button>
+                    {scoreParams >= 70 ? (
+                        <button className="next_btn" onClick={nextStageEvent}>
+                            <img className="level_img" src={retryBtnImg} alt="레벨업" />
+                        </button>
+                    ) : null}
+                </div>
+            )}
 		</>
 	)
 }
