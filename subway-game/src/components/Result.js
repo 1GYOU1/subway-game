@@ -8,6 +8,7 @@ import nextStageImg1 from '../img/hard_level1.png';
 import nextStageImg2 from '../img/hard_level2.png';
 import nextStageImg3 from '../img/hard_level3.png';
 import retryBtnImg from '../img/retry_btn.png';
+import goBackBtn from '../img/go_back_btn.png';
 import nextStageBtnImg from '../img/levelup_btn.png';
 
 const Result = () => {
@@ -22,7 +23,7 @@ const Result = () => {
 		console.log(params1, params2)
         const loadingShow = setTimeout(() => {
             setLoading(false);
-        }, 1500);
+        }, 1900);
 
         return () => clearTimeout(loadingShow);
     }, []);
@@ -35,7 +36,7 @@ const Result = () => {
 					<>
 						<img id="level_img" className="level_img" src={nextStageImg1} alt="마스터 실패"/>
 						<h4 className="score">{params2}점</h4>
-						<p className="result_txt">불태웠지만...<br/></p>
+						<p className="result_txt">하얗게 불태웠다....<br/>다시 한 번 도전해보세요..!</p>
 					</>
 				)
 			}else if(params2 > 30 && params2 <= 60){
@@ -43,7 +44,7 @@ const Result = () => {
 					<>
 						<img id="level_img" className="level_img" src={nextStageImg2} alt="노력형"/>
 						<h4 className="score">{params2}점</h4>
-						<p className="result_txt">점수 40 ~ 60<br/></p>
+						<p className="result_txt">거의 다 왔어요.<br/>전진해서 마스터에 도전 해보세요!</p>
 					</>
 				)
 			}else{
@@ -51,7 +52,7 @@ const Result = () => {
 					<>
 						<img id="level_img" className="level_img" src={nextStageImg3} alt="마스터"/>
 						<h4 className="score">{params2}점</h4>
-						<p className="result_txt">당신은 지하철 역 마스터.<br/>혹시 역무원 ?</p>
+						<p className="result_txt">당신은 지하철 마스터!<br/>가지 못할 곳은 없어요~<br/>혹시 역무원 ?</p>
 					</>
 				)
 			}
@@ -85,7 +86,7 @@ const Result = () => {
 	}
 
 	// start 이동
-	const retryEvent = () => {
+	const goBackEvent = () => {
 		navigate('/start');
 	}
 
@@ -93,6 +94,14 @@ const Result = () => {
 	const nextStageEvent = () => {
 		navigate(`/${nextStageGo}`);
 	}
+
+/*
+	버튼 노출 예외처리
+
+	1. 맨처음 ~ 결과 0 ~ 60 점 -> 처음부터
+	2. 맨처음 ~ 결과 70 ~ 100 점 -> 레벨업, 처음부터
+	3. nextStage ~ 결과 0 ~ 100 점 -> 다시하기, 처음부터
+*/
 
 	return (
 		<>
@@ -105,14 +114,21 @@ const Result = () => {
                     <div>
                         {resultEvent()}
                     </div>
-					{params1 >= 70 ? (
-                        <button className="next_btn" onClick={nextStageEvent}>
-                            <img src={nextStageBtnImg} alt="레벨업" />
-                        </button>
-                    ) : null}
-                    <button className="retry_btn" onClick={retryEvent}>
-                        <img src={retryBtnImg} alt="다시하기" />
-                    </button>
+					<div className='btn_area'>
+						<button className="retry_btn" onClick={goBackEvent}>
+							<img src={goBackBtn} alt="처음부터" />
+						</button>
+						{(params1 >= 70) && (params1 !== 'nextStage') ? (
+							<button className="next_btn" onClick={nextStageEvent}>
+								<img src={nextStageBtnImg} alt="레벨업" />
+							</button>
+						) : null}
+						{(params1 === 'nextStage') ? (
+							<button className="next_btn" onClick={nextStageEvent}>
+								<img src={retryBtnImg} alt="다시하기" />
+							</button>
+						) : null}
+					</div>
                 </div>
             )}
 		</>

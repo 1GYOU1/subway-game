@@ -50,12 +50,15 @@ const Game = () => {
         9. 새로 고침 방지
         10. 결과 값 params로 전달
         11. 결과 페이지 노출 (상, 중, 하)
-        13. Next stage
+        12. Next stage
             ㄴ nextStage intro.js
             ㄴ nextStage Go.js
-            ㄴ 1~9호선 랜덤 노출
-        --------------------            
+            ㄴ 1~9호선 랜덤 노출            
             ㄴ 5초 안에 맞추기
+        13. nextStage에서 게임오버하면 nextStage로 재시작
+            ㄴ 처음부터 버튼
+        ----------------------------------------
+        13. nextStage에서 게임오버하면 nextStage로 재시작
     */
 
     //select -> game으로 호선 전달
