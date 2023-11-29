@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // image
 import miceImg from '../img/mice.png';
+import miceImg2 from '../img/level3.png';
 import submitBtnImg from '../img/btn_submit.png';
 import clickImg from '../img/click.png';
 import correctImg from '../img/scoring1.png';
@@ -57,7 +58,6 @@ const Game = () => {
             ㄴ 5초 안에 맞추기
         13. nextStage에서 게임오버하면 nextStage로 재시작
             ㄴ 처음부터 버튼
-        ----------------------------------------
         13. nextStage에서 게임오버하면 nextStage로 재시작
     */
 
@@ -452,7 +452,11 @@ const Game = () => {
                             <img src={submitBtnImg} alt="정답 제출하기"/>
                         </button>
                     </form>
-                    <img className='mice' src={miceImg} alt="쥐"/>
+                    {params === 'nextStage' ? (
+                        <img className='mice' src={miceImg2} alt="서울쥐"/>
+                    ) : (
+                        <img className='mice' src={miceImg} alt="시골쥐"/>
+                    )}
                 </div>
                 {/* 정답, 오답, 중복 이미지 */}
                 {quizResultEvent()}
